@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-const User = require("../models/SiginSchema");
+const User = require("../models/siginSchema");
 
 exports.createUser = async (req, res) => {
   try {
@@ -50,9 +50,11 @@ exports.createUser = async (req, res) => {
     console.log(token);
     console.log(user);
 
-    res.status(201).json(token); // return new user
+    res.status(201).json(user); // return new user
   } catch (err) {
     console.log(err);
+    // return new user
+
   }
 };
 
@@ -66,10 +68,6 @@ exports.loginUser= async(req,res)=>{
         }
     
         const user = await User.findOne({ email }); // Validate if user exist in our database
-    
-        console.log(user.password);
-        console.log(password);
-        console.log(await bcrypt.compare(password, user.password));
     
         if (user && (await bcrypt.compare(password, user.password))) {
           console.log("tokenn.......");
@@ -87,7 +85,10 @@ exports.loginUser= async(req,res)=>{
           console.log(result);
     
           res.status(200).json(result);
-        } else {
+        }else if(!user){
+          console.log("user not found");
+          res.status(400).json("user not found");
+        } else if(!bcrypt.compare(password, user.password)) {
           console.log("wrong password");
           res.status(401).json("wrong password");
         }

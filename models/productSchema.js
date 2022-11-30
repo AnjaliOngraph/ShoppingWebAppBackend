@@ -7,20 +7,12 @@ const productSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  href: {
-    type: String,
-    required: true,
-  },
   price: {
     type: Number,
     required: true,
     default:0
   },
   imageSrc: {
-    type: String,
-    required: true,
-  },
-  imageAlt: {
     type: String,
     required: true,
   },
