@@ -5,7 +5,7 @@ exports.createAddress = async (req, res) => {
     const address = await Address.create(req.body);
     res.status(201).json(address);
   } catch (error) {
-    res.status(400).json(error)
+    res.status(400).json(error);
   }
 };
 
@@ -39,9 +39,20 @@ exports.updateAddress = async (req, res) => {
           console.log(err);
         }
         console.log("result", result);
-        res.send("Done");
+        res.status(201).json(result);
       }
     );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.deleteAddress = async (req, res) => {
+  try {
+    
+    await Address.findByIdAndDelete({_id:req.params.id})
+    res.status(201).send("done")
+    
   } catch (error) {
     console.log(error);
   }

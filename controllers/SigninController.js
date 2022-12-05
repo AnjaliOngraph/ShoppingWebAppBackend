@@ -85,10 +85,12 @@ exports.loginUser= async(req,res)=>{
           console.log(result);
     
           res.status(200).json(result);
-        }else if(!user){
+        }
+        if(!user){
           console.log("user not found");
           res.status(400).json("user not found");
-        } else if(!bcrypt.compare(password, user.password)) {
+        } 
+         if(bcrypt.compare(password, user.password)) {
           console.log("wrong password");
           res.status(401).json("wrong password");
         }

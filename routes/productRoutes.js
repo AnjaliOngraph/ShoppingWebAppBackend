@@ -8,7 +8,7 @@ const {
   getProductDetails,
 } = require("../controllers/productController");
 const { createUser,loginUser } = require("../controllers/SigninController");
-const {createAddress , findAddress, updateAddress} = require("../controllers/addressController");
+const {createAddress , findAddress, updateAddress, deleteAddress} = require("../controllers/addressController");
 const {createOrder, getOrder} = require("../controllers/orderController")
 
 router.get("/subcategory-products/:id", getProductsBySubCategory);
@@ -26,5 +26,7 @@ router.post("/placeOrder",createOrder )
 router.post("/newAddress", createAddress);
 router.post("/signup", createUser);
 router.post("/login",loginUser);
+
+router.delete("/deleteAddress/:id", deleteAddress);
 
 module.exports = router;
