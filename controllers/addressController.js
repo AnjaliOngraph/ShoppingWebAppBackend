@@ -2,7 +2,12 @@ const Address = require("../models/addressSchema");
 
 exports.createAddress = async (req, res) => {
   try {
-    const address = await Address.create(req.body);
+    const { id } = req.user;
+    let details = req.body;
+    details.UserId = id;
+
+    const address = await Address.create(details);
+
     res.status(201).json(address);
   } catch (error) {
     res.status(400).json(error);
@@ -10,7 +15,7 @@ exports.createAddress = async (req, res) => {
 };
 
 exports.findAddress = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.user;
 
   try {
     const addressExist = await Address.find({ UserId: id });
@@ -27,12 +32,16 @@ exports.findAddress = async (req, res) => {
 };
 
 exports.updateAddress = async (req, res) => {
-  const { id } = req.params;
+  const { id1 } = req.params;
+
+  const { id } = req.user;
+    let details = req.body;
+    details.UserId = id;
 
   try {
     await Address.findByIdAndUpdate(
-      { _id: id },
-      { $set: req.body },
+      { _id: id1 },
+      { $set: details },
       { new: true },
       function (err, result) {
         if (err) {
@@ -49,10 +58,8 @@ exports.updateAddress = async (req, res) => {
 
 exports.deleteAddress = async (req, res) => {
   try {
-    
-    await Address.findByIdAndDelete({_id:req.params.id})
-    res.status(201).send("done")
-    
+    await Address.findByIdAndDelete({ _id: req.params.id });
+    res.status(201).send("done");
   } catch (error) {
     console.log(error);
   }

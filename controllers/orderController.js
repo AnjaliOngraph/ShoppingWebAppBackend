@@ -2,7 +2,12 @@ const Orders = require("../models/orderSchema");
 
 exports.createOrder = async (req, res) => {
   try {
-    const Order = await Orders.create(req.body);
+    const { id } = req.user;
+    let details = req.body;
+    details.userId = id;
+
+    const Order = await Orders.create(details);
+    
     res.status(201).json(Order);
   } catch (error) {
     res.status(400).json(error);
@@ -10,7 +15,7 @@ exports.createOrder = async (req, res) => {
 };
 
 exports.getOrder = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.user;
   try {
     const Order = await Orders.find({ userId: id })
       .populate({ path: "userId", select: "first_name email -_id" })
