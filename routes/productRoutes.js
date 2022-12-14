@@ -42,7 +42,7 @@ router.post("/login", loginUser);
 router.post("/forgot-password", forgotPassword);
 router.post("/:id/:token", resetPassword);
 
-router.delete("/deleteAddress/:id", deleteAddress);
+router.patch("/deleteAddress/:id", deleteAddress);
 
 router.use("*", (req, res) => {
   res.status(404).json({

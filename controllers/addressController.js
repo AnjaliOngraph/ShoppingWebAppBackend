@@ -5,9 +5,11 @@ exports.createAddress = async (req, res) => {
     const { id } = req.user;
     let details = req.body;
     details.UserId = id;
+    details.setDeleted = false;
 
     const address = await Address.create(details);
 
+    console.log(address);
     res.status(201).json(address);
   } catch (error) {
     res.status(400).json(error);
@@ -18,9 +20,11 @@ exports.findAddress = async (req, res) => {
   const { id } = req.user;
 
   try {
-    const addressExist = await Address.find({ UserId: id });
+    const addressExist = await Address.find({ UserId: id ,setDeleted:false});
+    
     if (addressExist) {
       res.status(201).json(addressExist);
+      
       console.log("Address exists");
     } else {
       console.log("no Address");
@@ -35,8 +39,8 @@ exports.updateAddress = async (req, res) => {
   const { id1 } = req.params;
 
   const { id } = req.user;
-    let details = req.body;
-    details.UserId = id;
+  let details = req.body;
+  details.UserId = id;
 
   try {
     await Address.findByIdAndUpdate(
@@ -57,9 +61,11 @@ exports.updateAddress = async (req, res) => {
 };
 
 exports.deleteAddress = async (req, res) => {
+  const { id } = req.params;
   try {
-    await Address.findByIdAndDelete({ _id: req.params.id });
-    res.status(201).send("done");
+    const details = await Address.findByIdAndUpdate({ _id: id },{setDeleted : true});
+    console.log(details, "details");
+    res.status(201).json(details);
   } catch (error) {
     console.log(error);
   }
